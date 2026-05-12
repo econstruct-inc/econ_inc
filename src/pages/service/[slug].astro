@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import { site } from '../../data/site';
+import { legacyServicePages } from '../../data/legacy';
+
+export function getStaticPaths() {
+  return legacyServicePages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page }
+  }));
+}
+
+const { page } = Astro.props;
+const schema = {
+  '@type': 'Service',
+  name: page.heading,
+  description: page.description,
+  provider: { '@type': 'GeneralContractor', name: 'econstruct', url: site.url },
+  areaServed: { '@type': 'City', name: 'Los Angeles' },
+  url: `${site.url}/service/${page.slug}/`
+};
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={`/service/${page.slug}/`}
+  image={page.image}
+  schema={schema}
+>
+  <section class="service-hero">
+    <div class="container service-page-grid">
+      <div>
+        <span class="eyebrow">Legacy service page</span>
+        <h1>{page.heading}</h1>
+        <p class="lead">{page.description}</p>
+        <div class="button-row">
+          <a class="button" href="/contact/">Request consultation</a>
+          <a class="button ghost" href="/services/">All services</a>
+        </div>
+      </div>
+      <img class="hero-main-image" src={page.image} alt={page.heading} width="700" height="840" />
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container article-layout">
+      <article class="article-body">
+        <p>
+          This service URL was preserved as an exact static page for the launch migration so existing search demand and old WordPress links continue to land on a relevant destination.
+        </p>
+        <p>
+          The content is intentionally focused and direct: this page states the service topic, location relevance, and contact path without forcing the visitor through an unnecessary redirect chain.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

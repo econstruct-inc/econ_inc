@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Contact econstruct | Los Angeles general contractor"
+  description="Contact econstruct for commercial TI, ADU construction, fire rebuild, bar construction, and general contracting work in Los Angeles."
+  path="/contact/"
+>
+  <section class="service-hero">
+    <div class="container service-page-grid">
+      <div>
+        <span class="eyebrow">Contact</span>
+        <h1>Tell econstruct about your project.</h1>
+        <p>Use the form to send project details directly to frank@econstructinc.com.</p>
+        <ul class="check-list">
+          <li><a href={`tel:${site.phoneHref}`}>{site.phoneDisplay}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>{site.license}</li>
+        </ul>
+      </div>
+      <div class="contact-shell">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

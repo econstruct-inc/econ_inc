@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { partnerLogos, projects } from '../data/projects';
+---
+
+<BaseLayout
+  title="Projects and portfolio | econstruct"
+  description="View selected econstruct commercial, restaurant, bar, ADU, and residential construction projects in Los Angeles."
+  path="/projects/"
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">Projects</span>
+      <h1>Selected econstruct portfolio.</h1>
+      <p>A focused sample of commercial, hospitality, ADU, and residential work migrated from the previous WordPress site.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid four">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="section cream">
+    <div class="container section-heading">
+      <span class="eyebrow">Brands</span>
+      <h2>Project experience across food service, retail, and residential work.</h2>
+    </div>
+    <div class="container logo-strip">
+      {partnerLogos.map((logo) => (
+        <div class="logo-tile"><img src={logo.src} alt={logo.alt} loading="lazy" /></div>
+      ))}
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { legacyPortfolioPages } from '../../data/legacy';
+---
+
+<BaseLayout
+  title="Portfolio | econstruct Los Angeles"
+  description="Portfolio work by econstruct across restaurant, bar, retail, office, residential, and ADU construction in Los Angeles."
+  path="/portfolio/"
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">Portfolio</span>
+      <h1>Portfolio work preserved for the launch migration.</h1>
+      <p class="lead">This page keeps the old portfolio destination live while the new static site preserves project proof, case studies, and conversion paths.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid four">
+      {legacyPortfolioPages.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

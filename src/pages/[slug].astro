@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../data/site';
+import { legacyArticlePages, legacyLandingPages } from '../data/legacy';
+
+export function getStaticPaths() {
+  const landingPaths = legacyLandingPages.map((page) => ({
+    params: { slug: page.slug },
+    props: { kind: 'landing', page }
+  }));
+
+  const articlePaths = legacyArticlePages.map((page) => ({
+    params: { slug: page.slug },
+    props: { kind: 'article', page }
+  }));
+
+  return [...landingPaths, ...articlePaths];
+}
+
+const { kind, page } = Astro.props;
+const schema =
+  kind === 'article'
+    ? {
+        '@type': 'BlogPosting',
+        headline: page.title,
+        description: page.description,
+        image: new URL(page.image, site.url).toString(),
+        author: { '@type': 'Organization', name: 'econstruct' },
+        publisher: {
+          '@type': 'Organization',
+          name: 'econstruct',
+          logo: {
+            '@type': 'ImageObject',
+            url: new URL('/images/econ_logo_2026_w_800.png', site.url).toString()
+          }
+        },
+        mainEntityOfPage: `${site.url}/${page.slug}/`
+      }
+    : {
+        '@type': 'Service',
+        name: page.heading,
+        description: page.description,
+        provider: { '@type': 'GeneralContractor', name: 'econstruct', url: site.url },
+        areaServed: { '@type': 'City', name: 'Los Angeles' },
+        url: `${site.url}/${page.slug}/`
+      };
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={`/${page.slug}/`}
+  image={page.image}
+  schema={schema}
+>
+  <section class="service-hero">
+    <div class="container service-page-grid">
+      <div>
+        <span class="eyebrow">{page.eyebrow ?? page.category}</span>
+        <h1>{page.heading ?? page.title}</h1>
+        <p class="lead">{page.lead ?? page.intro}</p>
+        <div class="button-row">
+          <a class="button" href={page.ctaHref ?? '/contact/'}>{kind === 'landing' ? 'Request consultation' : 'Contact econstruct'}</a>
+          {page.serviceHref && <a class="button ghost" href={page.serviceHref}>Related service</a>}
+        </div>
+      </div>
+      <img class="hero-main-image" src={page.image} alt={kind === 'landing' ? page.heading : page.imageAlt} width="700" height="840" />
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container article-layout">
+      <article class="article-body">
+        {kind === 'landing' ? (
+          <>
+            <p>{page.lead}</p>
+            <ul class="check-list">
+              {page.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
+            <h2>Why this page exists in the launch migration.</h2>
+            <p>
+              This URL was preserved as a real page so the Cloudflare migration keeps high-intent search demand attached to a relevant destination instead of sending the topic into a broad hub page.
+            </p>
+            <h2>Related construction paths.</h2>
+            <div class="faq-list">
+              {page.related.map((item) => (
+                <article class="faq-item">
+                  <h3>{item.label}</h3>
+                  <a class="button ghost" href={item.href}>View {item.label}</a>
+                </article>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <p>{page.intro}</p>
+            {page.sections.map((section) => <p>{section}</p>)}
+          </>
+        )}
+      </article>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

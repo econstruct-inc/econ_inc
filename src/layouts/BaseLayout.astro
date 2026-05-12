@@ -1,0 +1,130 @@
+---
+import '../styles/global.css';
+import { navItems, site, serviceAreas } from '../data/site';
+import { services } from '../data/services';
+
+type Props = {
+  title: string;
+  description: string;
+  path?: string;
+  image?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+};
+
+const { title, description, path = '/', image = '/images/hero-office.jpg', schema = [] } = Astro.props;
+const canonical = new URL(path, site.url).toString();
+const ogImage = new URL(image, site.url).toString();
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => currentPath === href || (href !== '/' && currentPath.startsWith(href));
+const preloadHero = path === '/' ? '/images/Constructing_Live-1.png' : null;
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  name: site.name,
+  url: site.url,
+  image: new URL('/images/econ_logo_2026_w_800.png', site.url).toString(),
+  telephone: site.phoneHref,
+  email: site.email,
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    addressCountry: site.address.country
+  },
+  areaServed: serviceAreas.map((area) => ({ '@type': 'City', name: area })),
+  hasCredential: site.license,
+  sameAs: [site.social.yelp]
+};
+const extraSchema = Array.isArray(schema) ? schema : [schema];
+const schemaGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [localBusinessSchema, ...extraSchema]
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    {preloadHero && <link rel="preload" as="image" href={preloadHero} fetchpriority="high" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="top-line">
+        <div class="container top-line-inner">
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={`tel:${site.phoneHref}`}>{site.phoneDisplay}</a>
+        </div>
+      </div>
+      <div class="container nav-wrap">
+        <a class="brand" href="/" aria-label="econstruct home">
+          <img src="/images/econ_logo_2026_w_800.png" alt="econstruct" width="220" height="64" />
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          {navItems.map((item) => (
+            <div class="nav-item">
+              <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+                {item.children && <span class="nav-caret" aria-hidden="true">▾</span>}
+              </a>
+              {item.children && (
+                <div class="nav-dropdown">
+                  {item.children.map((child) => <a href={child.href}>{child.label}</a>)}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
+        <a class="phone-pill" href="/contact/">Get a Quote <span class="phone-pill-arrow" aria-hidden="true">›</span></a>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <img class="footer-logo" src="/images/econ_logo_2026_w_800.png" alt="econstruct" width="220" height="64" />
+          <p>Los Angeles general contractor for commercial tenant improvements, ADUs, fire rebuilds, restaurants, bars, and residential construction.</p>
+          <p>{site.license}</p>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="/about-us/">About Us</a>
+          <a href="/projects/">Projects</a>
+          <a href="/case-studies/">Case Studies</a>
+          <a href="/blogs/">Blogs</a>
+          <a href="/reviews/">Reviews</a>
+          <a href="/privacy-policy/">Privacy Policy</a>
+        </div>
+        <div>
+          <h2>Services</h2>
+          {services.map((service) => <a href={service.launchHref ?? `/services/${service.slug}/`}>{service.title}</a>)}
+        </div>
+        <div>
+          <h2>Contact</h2>
+          <a href={`tel:${site.phoneHref}`}>{site.phoneDisplay}</a>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <p>Serving Los Angeles and surrounding communities.</p>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>© {new Date().getFullYear()} econstruct. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

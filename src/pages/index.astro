@@ -1,0 +1,319 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import { getCollection } from 'astro:content';
+import { faqs, serviceAreas, site } from '../data/site';
+import { services } from '../data/services';
+import { gallery, partnerLogos, projects } from '../data/projects';
+
+const blogPosts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 3);
+
+const homepageSchema = [
+  {
+    '@type': 'WebSite',
+    name: 'econstruct',
+    url: site.url,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${site.url}/services/?q={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    }
+  },
+  {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+    }))
+  },
+  {
+    '@type': 'ItemList',
+    name: 'econstruct construction services',
+    itemListElement: services.map((service, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: service.title,
+      url: `${site.url}/services/${service.slug}/`
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title="econstruct | Los Angeles commercial TI, ADU, fire rebuild and bar construction"
+  description="econstruct is a Los Angeles general contractor for commercial tenant improvements, ADUs, fire rebuilds, bar construction, restaurant construction, and residential projects."
+  path="/"
+  schema={homepageSchema}
+>
+  <section class="hero-slider" aria-label="econstruct featured projects">
+    <div class="hero-slides">
+      <article class="hero-slide is-active" data-slide="0" style="--slide-image: url('/images/Constructing_Live-1.png')">
+        <div class="container hero-slide-inner">
+          <h1 class="hero-headline">
+            <span>Constructing</span>
+            <span>Exceptional</span>
+            <span>Spaces to <em>Live</em></span>
+          </h1>
+          <div class="hero-cta-row">
+            <a class="pill-cta" href="/los-angeles-residential-construction-services/">
+              <span>More on <strong>Residential Construction</strong></span>
+              <span class="pill-arrow" aria-hidden="true">›</span>
+            </a>
+            <a class="pill-cta" href="/construction-projects/">
+              <span>See Residential <strong>Construction Portfolio</strong></span>
+              <span class="pill-arrow" aria-hidden="true">›</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="hero-slide" data-slide="1" style="--slide-image: url('/images/Constructing_Shop.png')">
+        <div class="container hero-slide-inner">
+          <h1 class="hero-headline">
+            <span>Constructing</span>
+            <span>Exceptional</span>
+            <span>Spaces to <em>Shop</em></span>
+          </h1>
+          <div class="hero-cta-row">
+            <a class="pill-cta" href="/retail-construction-los-angeles/">
+              <span>More on <strong>Retail Construction</strong></span>
+              <span class="pill-arrow" aria-hidden="true">›</span>
+            </a>
+            <a class="pill-cta" href="/construction-projects/">
+              <span>See Retail <strong>Construction Portfolio</strong></span>
+              <span class="pill-arrow" aria-hidden="true">›</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="hero-slide" data-slide="2" style="--slide-image: url('/images/Constructing_Eat.png')">
+        <div class="container hero-slide-inner">
+          <h1 class="hero-headline">
+            <span>Constructing</span>
+            <span>Exceptional</span>
+            <span>Spaces to <em>Eat</em></span>
+          </h1>
+          <div class="hero-cta-row">
+            <a class="pill-cta" href="/services/bar-construction/">
+              <span>More on <strong>Restaurant Construction</strong></span>
+              <span class="pill-arrow" aria-hidden="true">›</span>
+            </a>
+            <a class="pill-cta" href="/construction-projects/">
+              <span>See Restaurant <strong>Construction Portfolio</strong></span>
+              <span class="pill-arrow" aria-hidden="true">›</span>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <button class="hero-nav prev" type="button" aria-label="Previous slide">‹</button>
+    <button class="hero-nav next" type="button" aria-label="Next slide">›</button>
+
+    <div class="hero-dots" role="tablist" aria-label="Slide selector">
+      <button type="button" class="hero-dot is-active" data-target="0" aria-label="Slide 1"></button>
+      <button type="button" class="hero-dot" data-target="1" aria-label="Slide 2"></button>
+      <button type="button" class="hero-dot" data-target="2" aria-label="Slide 3"></button>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const slider = document.querySelector('.hero-slider');
+      if (!slider) return;
+      const slides = slider.querySelectorAll('.hero-slide');
+      const dots = slider.querySelectorAll('.hero-dot');
+      let i = 0;
+      let timer;
+      const go = (n) => {
+        i = (n + slides.length) % slides.length;
+        slides.forEach((s, idx) => s.classList.toggle('is-active', idx === i));
+        dots.forEach((d, idx) => d.classList.toggle('is-active', idx === i));
+      };
+      const start = () => { timer = setInterval(() => go(i + 1), 6000); };
+      const stop = () => clearInterval(timer);
+      slider.querySelector('.hero-nav.next').addEventListener('click', () => { stop(); go(i + 1); start(); });
+      slider.querySelector('.hero-nav.prev').addEventListener('click', () => { stop(); go(i - 1); start(); });
+      dots.forEach((d) => d.addEventListener('click', () => { stop(); go(parseInt(d.dataset.target, 10)); start(); }));
+      slider.addEventListener('mouseenter', stop);
+      slider.addEventListener('mouseleave', start);
+      start();
+    })();
+  </script>
+
+  <section class="wp-yellow-strip">
+    <div class="container wp-yellow-inner">
+      <h2>Revolutionizing Los Angeles construction spaces to live, work, shop and eat.</h2>
+      <a class="button secondary" href="/contact/">Book your free consultation now</a>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container about-card">
+      <div class="about-image-wrap">
+        <img src="/images/project-residential.jpg" alt="completed hillside residential construction by econstruct" width="700" height="525" loading="lazy" />
+        <div class="experience-badge"><span><strong>634</strong>projects completed</span></div>
+      </div>
+      <div>
+        <span class="eyebrow">About our company</span>
+        <h2>We build spaces that work after opening day.</h2>
+        <p class="lead">econstruct is a Los Angeles construction company focused on real project outcomes: clean scope, permit and inspection awareness, trade sequencing, owner communication, and finish quality.</p>
+        <div class="dark-panel">
+          <h3>What sets the team apart</h3>
+          <p>Commercial and residential construction in Los Angeles needs more than labor. It needs a contractor who understands access, approvals, MEP coordination, finish decisions, and the cost of slow answers.</p>
+          <ul class="check-list">
+            <li>{site.license}</li>
+            <li>Commercial TI, ADUs, bars, restaurants, rebuilds, and homes</li>
+            <li>Serving {serviceAreas.slice(0, 5).join(', ')} and nearby communities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container mini-benefits">
+      <div class="mini-benefit"><span class="mini-icon">01</span><div><h3>Preconstruction clarity</h3><p>Scope, plans, budget signals, lead times, and phasing are reviewed before work starts.</p></div></div>
+      <div class="mini-benefit"><span class="mini-icon">02</span><div><h3>Trade coordination</h3><p>Construction teams are sequenced around inspections, systems, finishes, and site access.</p></div></div>
+      <div class="mini-benefit"><span class="mini-icon">03</span><div><h3>Owner communication</h3><p>Decisions, risks, and next steps stay visible throughout the project.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section cream">
+    <div class="container section-heading">
+      <span class="eyebrow">Our services</span>
+      <h2>Modern building solutions for Los Angeles projects.</h2>
+      <p class="lead">The site now gives each core service its own SEO-ready page, while this homepage surfaces the main conversion paths.</p>
+    </div>
+    <div class="container grid four">
+      {services.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </section>
+
+  <section class="image-banner" style="--banner-image: url('/images/project-bar.jpg')">
+    <div class="container image-banner-content">
+      <span class="eyebrow">Our impact</span>
+      <h2>Building with trusted commercial and residential crews.</h2>
+      <p>econstruct brings planning, field coordination, and finish execution together for owners who need construction done without unnecessary noise.</p>
+      <a class="button" href="/about-us/">Learn about econstruct</a>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="container impact-grid">
+      <div class="impact-card">
+        <img src="/images/commercial-ti.png" alt="commercial tenant improvement work by econstruct" width="680" height="510" loading="lazy" />
+      </div>
+      <div>
+        <span class="eyebrow">Fun facts</span>
+        <h2>Numbers with local project context.</h2>
+        <div class="impact-list">
+          <div class="impact-item"><strong>634</strong><span>completed projects across commercial, hospitality, and residential work</span></div>
+          <div class="impact-item"><strong>51+</strong><span>years combined construction experience</span></div>
+          <div class="impact-item"><strong>4</strong><span>priority service lines for the Cloudflare Pages launch</span></div>
+          <div class="impact-item"><strong>LA</strong><span>service area focused on Los Angeles and nearby cities</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container section-heading">
+      <span class="eyebrow">Selected projects</span>
+      <h2>Commercial, hospitality, ADU, and residential work.</h2>
+    </div>
+    <div class="container grid four">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section class="section cream">
+    <div class="container testimonial-feature">
+      <div class="quote-card">
+        <div class="rating">4.9/5 local review signal</div>
+        <h3>Read our successful client stories</h3>
+        <p>Working with econstruct means getting a construction partner who understands Los Angeles schedules, field coordination, and the details that affect final delivery.</p>
+        <strong>econstruct clients</strong>
+      </div>
+      <div>
+        <span class="eyebrow">Our testimonials</span>
+        <h2>Clear communication from planning through punch list.</h2>
+        <p class="lead">The previous WordPress site emphasized testimonials, reviews, and trusted project delivery. This rebuild keeps those signals visible while reducing page weight and WordPress risk.</p>
+        <div class="logo-strip">
+          {partnerLogos.map((logo) => (
+            <div class="logo-tile"><img src={logo.src} alt={logo.alt} loading="lazy" /></div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="expertise-band">
+    <div class="container">
+      <div class="expertise-panel">
+        <span class="eyebrow">Expertise and experience</span>
+        <h2>Construction decisions need field reality.</h2>
+        <p>econstruct helps owners move from idea to buildable scope with fewer surprises around plans, permitting, trades, materials, and inspections.</p>
+        <ul class="check-list">
+          <li>Commercial general contractor experience</li>
+          <li>Residential and ADU construction knowledge</li>
+          <li>Hospitality and bar buildout coordination</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container section-heading center">
+      <span class="eyebrow">Image gallery</span>
+      <h2>Explore econstruct project visuals.</h2>
+    </div>
+    <div class="container gallery-grid">
+      {gallery.map((item) => <img src={item.src} alt={item.alt} loading="lazy" />)}
+    </div>
+  </section>
+
+  <section class="section cream">
+    <div class="container section-heading center">
+      <span class="eyebrow">Latest insight</span>
+      <h2>Local construction guidance.</h2>
+    </div>
+    <div class="container grid three">
+      {blogPosts.map((post) => (
+        <article class="blog-card">
+          <img src={post.data.image} alt={post.data.imageAlt} loading="lazy" />
+          <div class="blog-card-body">
+            <div class="meta"><span>{post.data.category}</span><span>{post.data.publishDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
+            <h3><a href={`/blogs/${post.id}/`}>{post.data.title}</a></h3>
+            <p>{post.data.description}</p>
+            <a class="button ghost" href={`/blogs/${post.id}/`}>Read {post.data.category}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container section-heading center">
+      <span class="eyebrow">FAQ</span>
+      <h2>Construction questions people ask before hiring a contractor.</h2>
+    </div>
+    <div class="container faq-list">
+      {faqs.map((faq) => (
+        <article class="faq-item">
+          <h3>{faq.question}</h3>
+          <p>{faq.answer}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CTA
+    title="Construction today for your next Los Angeles project."
+    text="Share your address, project type, timing, and any plans or photos. econstruct will help identify the next practical step."
+  />
+</BaseLayout>

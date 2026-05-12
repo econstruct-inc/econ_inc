@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+---
+
+<BaseLayout
+  title="Construction case studies | econstruct Los Angeles"
+  description="Explore econstruct case studies for Los Angeles restaurant construction, bar construction, retail buildouts, ADUs, and residential projects."
+  path="/case-studies/"
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">Case Studies</span>
+      <h1>Proof points for qualified construction leads.</h1>
+      <p class="lead">Case studies should show project type, location, constraints, and outcome. This hub keeps the old WordPress case-study intent alive while pointing users toward current work.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid four">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <CTA title="Have a project similar to these?" text="Send econstruct your project type, timing, and any drawings or photos so the team can respond with relevant next steps." />
+</BaseLayout>

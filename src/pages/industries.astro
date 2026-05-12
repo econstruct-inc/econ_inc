@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { industryLinks, site } from '../data/site';
+
+const schema = {
+  '@type': 'ItemList',
+  name: 'Construction industries served by econstruct in Los Angeles',
+  itemListElement: industryLinks.map((industry, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: industry.title,
+    description: industry.summary,
+    url: `${site.url}${industry.href}`
+  }))
+};
+---
+
+<BaseLayout
+  title="Construction industries in Los Angeles | econstruct"
+  description="econstruct serves Los Angeles restaurants, bars, retail spaces, offices, residential projects, ADUs, and food manufacturing construction projects."
+  path="/industries/"
+  schema={schema}
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">Industries</span>
+      <h1>Construction expertise by project type.</h1>
+      <p class="lead">The fastest path to a lead is clear search intent. This hub organizes econstruct around the industries people actually search for: restaurant, bar, retail, office TI, residential, ADU, and food manufacturing construction in Los Angeles.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid three">
+      {industryLinks.map((industry) => (
+        <article id={industry.id} class="faq-item">
+          <span class="eyebrow">Los Angeles</span>
+          <h2>{industry.title}</h2>
+          <p>{industry.summary}</p>
+          <a class="button ghost" href={industry.href}>View {industry.title}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CTA title="Need the right contractor for your industry?" text="Tell econstruct what you are opening, rebuilding, improving, or adding, and the team will point you to the right next step." />
+</BaseLayout>

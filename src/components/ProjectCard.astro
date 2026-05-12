@@ -1,0 +1,23 @@
+---
+type Props = {
+  project: {
+    title: string;
+    type: string;
+    location: string;
+    image: string;
+    alt: string;
+    summary: string;
+  };
+};
+
+const { project } = Astro.props;
+---
+
+<article class="project-card">
+  <img src={project.image} alt={project.alt} width="600" height="450" loading="lazy" />
+  <div class="project-card-body">
+    <div class="meta"><span>{project.type}</span><span>{project.location}</span></div>
+    <h3>{project.title}</h3>
+    <p>{project.summary}</p>
+  </div>
+</article>

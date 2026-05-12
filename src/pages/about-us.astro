@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { serviceAreas, site } from '../data/site';
+---
+
+<BaseLayout
+  title="About econstruct | Los Angeles general contractor"
+  description="Learn about econstruct, a Los Angeles general contractor serving commercial, hospitality, ADU, residential, and rebuild projects."
+  path="/about-us/"
+>
+  <section class="service-hero">
+    <div class="container about-card">
+      <div>
+        <span class="eyebrow">About Us</span>
+        <h1>Los Angeles construction, managed with clarity.</h1>
+        <p>econstruct is a general contractor serving Los Angeles owners, operators, developers, and homeowners who need construction handled with practical planning and disciplined execution.</p>
+        <p>The company works across commercial tenant improvements, ADUs, fire rebuilds, bars, restaurants, retail, and residential projects.</p>
+      </div>
+      <img class="hero-main-image" src="/images/project-residential.jpg" alt="completed residential construction project by econstruct" width="700" height="840" />
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid three">
+      <article class="faq-item">
+        <h3>Licensed</h3>
+        <p>{site.license} for general construction work in California.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Local</h3>
+        <p>Focused on Los Angeles buildings, codes, inspections, access constraints, and project realities.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Practical</h3>
+        <p>Built around scope clarity, schedule discipline, trade coordination, and direct owner communication.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="container section-heading">
+      <span class="eyebrow">Service area</span>
+      <h2>Serving Los Angeles and nearby communities.</h2>
+      <p>{serviceAreas.join(', ')}.</p>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

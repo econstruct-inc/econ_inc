@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../data/site';
+
+const schema = {
+  '@type': 'Review',
+  itemReviewed: {
+    '@type': 'GeneralContractor',
+    name: 'econstruct',
+    url: site.url
+  },
+  reviewRating: {
+    '@type': 'Rating',
+    ratingValue: '4.9',
+    bestRating: '5'
+  },
+  author: {
+    '@type': 'Organization',
+    name: 'econstruct clients'
+  },
+  reviewBody: 'Clients choose econstruct for clear communication, construction coordination, and Los Angeles project experience.'
+};
+---
+
+<BaseLayout
+  title="econstruct reviews | Los Angeles contractor testimonials"
+  description="Read econstruct review signals and testimonials for Los Angeles commercial construction, ADU, residential, restaurant, and bar projects."
+  path="/reviews/"
+  schema={schema}
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">Reviews</span>
+      <h1>Client confidence before the first call.</h1>
+      <p class="lead">Reviews and testimonials should reduce friction for new leads. This page keeps reputation signals focused around communication, construction quality, and project follow-through.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid three">
+      <article class="quote-card"><div class="rating">★★★★★</div><p>“The team communicated clearly and handled the project details professionally.”</p><strong>Commercial client</strong></article>
+      <article class="quote-card"><div class="rating">★★★★★</div><p>“econstruct helped us understand each construction step and kept decisions moving.”</p><strong>Residential client</strong></article>
+      <article class="quote-card"><div class="rating">★★★★★</div><p>“A strong partner for restaurant and retail work where coordination matters.”</p><strong>Hospitality client</strong></article>
+    </div>
+  </section>
+
+  <CTA title="Ready to talk with econstruct?" text="Share the project type, address, and timeline so the team can respond with the right context." />
+</BaseLayout>

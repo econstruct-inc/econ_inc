@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import { services } from '../data/services';
+import { site } from '../data/site';
+
+const supportingServices = [
+  {
+    id: 'construction-management',
+    title: 'Construction Management',
+    summary: 'Planning, scheduling, communication, and field coordination for Los Angeles construction projects.'
+  },
+  {
+    id: 'general-contracting',
+    title: 'General Contracting',
+    summary: 'Licensed general contracting for commercial, residential, hospitality, and tenant improvement work.'
+  },
+  {
+    id: 'entitlement-expediting',
+    title: 'Entitlement/Expediting',
+    summary: 'Project support around permits, agency requirements, inspection coordination, and approval paths.'
+  },
+  {
+    id: 'equipment-procurement',
+    title: 'Equipment Procurement',
+    summary: 'Construction coordination around owner-provided equipment, restaurant equipment, fixtures, and specialty materials.'
+  }
+];
+
+const servicesSchema = {
+  '@type': 'ItemList',
+  name: 'econstruct services in Los Angeles',
+  itemListElement: services.map((service, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: service.title,
+    description: service.description,
+    url: `${site.url}/services/${service.slug}/`
+  }))
+};
+---
+
+<BaseLayout
+  title="Construction services in Los Angeles | econstruct"
+  description="Explore econstruct services for commercial TI, ADU construction, fire rebuild, bar construction, restaurant construction, and residential construction in Los Angeles."
+  path="/services/"
+  schema={servicesSchema}
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">Our services</span>
+      <h1>Construction services built around Los Angeles realities.</h1>
+      <p class="lead">econstruct supports owners, operators, homeowners, and project teams through scope planning, permitting awareness, trade coordination, construction, and closeout.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container grid four">
+      {services.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </section>
+
+  <section class="image-banner" style="--banner-image: url('/images/commercial-ti.png')">
+    <div class="container image-banner-content">
+      <span class="eyebrow">How econstruct works</span>
+      <h2>Scope first, then schedule, trades, inspections, and finish quality.</h2>
+      <p>Every service page is written for real search intent: what the work includes, how the process runs, and which Los Angeles project constraints matter.</p>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container section-heading">
+      <span class="eyebrow">Additional services</span>
+      <h2>Support that helps projects move.</h2>
+      <p class="lead">These supporting services match the old WordPress menu while keeping the new site easier for search engines, AI assistants, and qualified leads to understand.</p>
+    </div>
+    <div class="container grid four">
+      {supportingServices.map((service) => (
+        <article id={service.id} class="faq-item">
+          <h3>{service.title}</h3>
+          <p>{service.summary}</p>
+          <a class="button ghost" href="/contact/">Ask about {service.title}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

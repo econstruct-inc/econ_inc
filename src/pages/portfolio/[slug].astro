@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import { legacyPortfolioPages } from '../../data/legacy';
+
+export function getStaticPaths() {
+  return legacyPortfolioPages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page }
+  }));
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={`/portfolio/${page.slug}/`}
+  image={page.image}
+>
+  <section class="service-hero">
+    <div class="container service-page-grid">
+      <div>
+        <span class="eyebrow">{page.type}</span>
+        <h1>{page.title}</h1>
+        <p class="lead">{page.summary}</p>
+        <div class="button-row">
+          <a class="button" href="/contact/">Discuss a similar project</a>
+          <a class="button ghost" href="/portfolio/">View portfolio</a>
+        </div>
+      </div>
+      <img class="hero-main-image" src={page.image} alt={page.title} width="700" height="840" />
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container article-layout">
+      <article class="article-body">
+        <p>{page.summary}</p>
+        <p>
+          This project page exists as part of the traffic-preserving migration strategy so older portfolio URLs continue to resolve to relevant project proof instead of a generic redirect target.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>

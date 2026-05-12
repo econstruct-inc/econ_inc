@@ -1,0 +1,26 @@
+---
+import { site } from '../data/site';
+
+type Props = {
+  title?: string;
+  text?: string;
+};
+
+const {
+  title = 'Start with a clear construction plan.',
+  text = 'Tell econstruct what you are building, where it is, and what timeline matters. The team will follow up directly.'
+} = Astro.props;
+---
+
+<section class="cta">
+  <div class="container cta-inner">
+    <div>
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="button-row">
+      <a class="button light" href="/contact/">Request a consultation</a>
+      <a class="button secondary" href={`tel:${site.phoneHref}`}>{site.phoneDisplay}</a>
+    </div>
+  </div>
+</section>

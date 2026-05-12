@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import { getCollection, render } from 'astro:content';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({
+      params: { slug: post.id },
+      props: { post }
+    }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const formattedDate = post.data.publishDate.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric'
+});
+const articleSchema = {
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate.toISOString(),
+  dateModified: post.data.publishDate.toISOString(),
+  image: new URL(post.data.image, site.url).toString(),
+  author: {
+    '@type': 'Organization',
+    name: 'econstruct'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'econstruct',
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL('/images/econ_logo_2026_w_800.png', site.url).toString()
+    }
+  },
+  mainEntityOfPage: `${site.url}/blogs/${post.id}/`
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | econstruct`}
+  description={post.data.description}
+  path={`/blogs/${post.id}/`}
+  image={post.data.image}
+  schema={articleSchema}
+>
+  <section class="service-hero">
+    <div class="container section-heading">
+      <span class="eyebrow">{post.data.category}</span>
+      <h1>{post.data.title}</h1>
+      <p class="lead">{post.data.description}</p>
+      <div class="meta"><span>{formattedDate}</span><span>Los Angeles construction insight</span></div>
+    </div>
+  </section>
+
+  <section class="section white">
+    <div class="container article-layout">
+      <article class="article-body">
+        <img src={post.data.image} alt={post.data.imageAlt} loading="eager" />
+        <Content />
+        {post.data.serviceHref && <a class="button ghost" href={post.data.serviceHref}>View related service</a>}
+      </article>
+    </div>
+  </section>
+
+  <CTA title="Have a project question?" text="Send econstruct your project type, address, and timing so the team can point you to the right next step." />
+</BaseLayout>

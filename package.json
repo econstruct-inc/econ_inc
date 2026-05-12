@@ -1,0 +1,20 @@
+{
+  "name": "econstruct-static-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

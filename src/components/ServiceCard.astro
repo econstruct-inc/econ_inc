@@ -1,0 +1,26 @@
+---
+type Props = {
+  service: {
+    id: string;
+    slug: string;
+    launchHref?: string;
+    title: string;
+    eyebrow: string;
+    image: string;
+    alt: string;
+    description: string;
+  };
+};
+
+const { service } = Astro.props;
+---
+
+<article class="service-card">
+  <img src={service.image} alt={service.alt} width="600" height="450" loading="lazy" />
+  <div class="service-card-body">
+    <span class="service-number">{service.id === 'commercial-ti' ? '01' : service.id === 'adu-construction' ? '02' : service.id === 'fire-rebuild' ? '03' : '04'}</span>
+    <h3>{service.title}</h3>
+    <p>{service.description}</p>
+    <a class="button light" href={service.launchHref ?? `/services/${service.slug}/`}>View {service.title}</a>
+  </div>
+</article>
