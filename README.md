@@ -1,57 +1,53 @@
-# econstruct static site
+# Econstruct Homes — Project Workspace
 
-Astro static rebuild of econstructinc.com for Cloudflare Pages.
+**Client:** Frank Neimroozi, Principal — Econstruct Homes  
+**Primary Domain:** econstructhomes.com  
+**Legacy Domain:** econstructinc.com (sunset 6–9 months)  
+**Repo:** github.com/drewquevedocom/econstructhomes-site  
+**Hosting:** Cloudflare Pages (free tier)  
+**PM/Strategy:** Claude Project (econstruct Inc)
 
-Project scope and migration rules live in `MIGRATION_RULES.md`.
-
-## Commands
-
-Use Node.js `22.12.0` or newer. Cloudflare Pages should be configured with `NODE_VERSION=22.12.0`.
-
-```bash
-npm install
-npm run dev
-npm run build
-```
-
-## Cloudflare Pages
-
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Functions directory: `functions`
-- Environment variable: `NODE_VERSION=22.12.0`
-
-## Required environment variables
-
-- `RESEND_API_KEY`
-- `CONTACT_TO_EMAIL=frank@econstructinc.com`
-- `CONTACT_FROM_EMAIL`
-- `TURNSTILE_SECRET_KEY`
-- `PUBLIC_TURNSTILE_SITE_KEY`
-
-The contact form posts to `/api/contact`, verifies the Turnstile token when configured, and sends the lead through Resend.
-
-## Publishing blog posts
-
-Create a new Markdown file in `src/content/blog/`:
-
-```md
----
-title: "Post title"
-description: "SEO description for the post."
-publishDate: 2026-05-05
-category: "Commercial TI"
-image: "/images/commercial-ti.png"
-imageAlt: "descriptive image alt text"
-serviceHref: "/services/commercial-ti/"
-draft: false
 ---
 
-Post body goes here.
-```
+## Three-Tool Workflow
 
-The post automatically appears on `/blogs/`, gets its own `/blogs/{slug}/` page, and can be linked from the homepage latest insight section.
+| Tool | Role |
+|---|---|
+| **Google Antigravity** | Visual builder — layout, design polish |
+| **Claude Cowork** | Senior dev — backend, Supabase, APIs, migration scripts |
+| **Claude Project** | Strategy + PM — migration plan, brand guardrails, Frank comms |
 
-## Migration rule
+---
 
-Do not shut down the old WordPress host immediately after launch. Keep it parked for one month as a rollback backup unless the owner explicitly approves immediate shutdown.
+## Project Status
+
+- [x] Domain confirmed: econstructhomes.com
+- [x] GitHub repo created: drewquevedocom/econstructhomes-site
+- [x] Cloudflare Pages connected
+- [ ] WordPress content exported
+- [ ] Redirect map complete
+- [ ] New site live on econstructhomes.com
+- [ ] econstructinc.com sunset plan executed
+
+---
+
+## Key Files
+
+| File | Purpose |
+|---|---|
+| `migration-plan.md` | Full migration timeline + phases |
+| `brand-guardrails.md` | What to preserve, what NOT to change |
+| `redirect-map.md` | 301 redirect map: inc.com → homes.com |
+| `seo-strategy.md` | SEO equity preservation strategy |
+| `frank-comms/` | Client-facing drafts and approvals |
+| `scripts/github_sync.py` | Workspace backup sync script |
+
+---
+
+## Hard Rules
+
+1. Do NOT redesign aesthetic without Frank's sign-off
+2. Do NOT break any inc.com URL without a 301 mapped
+3. Do NOT touch the WordPress site directly
+4. Flag every cost upfront (target: $0/mo hosting)
+5. Always before/after diffs on changes
